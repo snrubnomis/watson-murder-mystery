@@ -11,12 +11,11 @@
 "use strict";
 
 // Variables for chat and stored context specific events
-var params = {  // Object for parameters sent to the Watson Conversation service
-    input: '',
-    context: '',
-};
-var watson = 'Bot';
-var user = '';
+var watson = 'watson';
+var manager = 'manager';
+var designer = 'designer';
+var developer = 'developer';
+var user = 'user';
 var context;  // Very important. Holds all the data for the current point of the chat.
 
 /**
@@ -38,8 +37,8 @@ function newEvent(e) {
         // If there is any input then check if this is a claim step
 		// Some claim steps are handled in newEvent and others are handled in userMessage
 		if (text) {
-			
-			// Display the user's text in the chat box and null out input box
+
+            // Display the user's text in the chat box and null out input box
             displayMessage(text, user);
             userInput.value = '';
             userMessage(text);
@@ -63,17 +62,43 @@ function newEvent(e) {
  * @function userMessage
  * @param {String} message - Input message from user or page load.  
  */
-function userMessage(message) {
-
-    // Set parameters for payload to Watson Conversation
-    params.input = {
-        text: message // User defined text to be sent to service
-    }; 
+function userMessage(message, nextPerson, previousPerson) {
+    var params = {  // Object for parameters sent to the Watson Conversation service
+        input : {
+            text: ''
+        },
+        context : {}
+    };
 
     // Add variables to the context as more options are chosen
     if (context) {
         params.context = context; // Add a context if there is one previously stored
-        params.context.username = "Stefania";
+    }
+
+    var switchBot = false;
+    if (message === '@manager' || nextPerson === manager) {
+        params.context.currentPerson = manager;
+        switchBot = true;
+    } else if (message === '@designer' || nextPerson === designer) {
+        params.context.currentPerson = designer;
+        switchBot = true;
+    } else if (message === '@developer' || nextPerson === developer) {
+        params.context.currentPerson = developer;
+        switchBot = true;
+    } else if (message === '@watson' || nextPerson === watson) {
+        params.context.currentPerson = watson;
+        switchBot = true;
+    }
+
+    // Set parameters for payload to Watson Conversation
+    if (switchBot) {
+        params.input.conversationRestart = true;
+
+        if (previousPerson) {
+            params.input.previousPerson = previousPerson;
+        }
+    } else {
+        params.input.text = message; // User defined text to be sent to service
     }
 
     var xhr = new XMLHttpRequest();
@@ -87,13 +112,19 @@ function userMessage(message) {
         if (xhr.status === 200 && xhr.responseText) {
 
             var response = JSON.parse(xhr.responseText);
-            var text = response.output.text[0]; // Only display the first response
+            var text = response.output.text;
+            var messageFrom = response.output.messageFrom;
             context = response.context; // Store the context for next round of questions
 
             console.log("Got response from Bot: ", JSON.stringify(response));
-            
-            displayMessage(text, watson);
 
+            if (!response.output.forwardOutput) {
+                displayMessage(text, messageFrom, context[messageFrom]);
+            }
+
+            if (response.output.nextPerson) {
+                userMessage(response.input.text, response.output.nextPerson, context.currentPerson);
+            }
         } else {
             console.error('Server error for Conversation. Return status of: ', xhr.statusText);
         }
@@ -117,22 +148,43 @@ function userMessage(message) {
  * @param {String} user - Denotes if the message is from Bot or the user. 
  * @return null
  */
-function displayMessage(text, user) {
+function displayMessage(text, user, name) {
 
     var chat = document.getElementById('chatBox');
     var bubble = document.createElement('div');
+
     bubble.className = 'message';  // Wrap the text first in a message class for common formatting
 
     // Set chat bubble color and position based on the user parameter
-	if (user === watson) {
-        bubble.innerHTML = "<div class='bot'>" + text + "</div>";
-    } else {
-        bubble.innerHTML = "<div class='user'>" + text + "</div>";
+    var messageClass = user;
+	if (user === manager) {
+        var messageClass = manager;
+    } else if (user === designer) {
+        var messageClass = designer;
+    } else if (user === developer) {
+        var messageClass = developer;
+    } else if (user === watson) {
+        var messageClass = watson;
     }
 
-    chat.appendChild(bubble);
-    chat.scrollTop = chat.scrollHeight;  // Move chat down to the last message displayed
-    document.getElementById('chatMessage').focus();
+    var messageText;
+    if (Array.isArray(text)) {
+        messageText = text.join(' ');
+    } else {
+        messageText = text;
+    }
+    
+    if (name) {
+        bubble.innerHTML = "<div class='" + messageClass + "'><span class='name'>" + name + ":</span> " + messageText + "</div>";
+    } else {
+        bubble.innerHTML = "<div class='" + messageClass + "'>" + messageText + "</div>";
+    }
+
+    if (messageText.length > 0) {
+        chat.appendChild(bubble);
+        chat.scrollTop = chat.scrollHeight;  // Move chat down to the last message displayed
+        document.getElementById('chatMessage').focus();
+    }
 
     return null;
 }

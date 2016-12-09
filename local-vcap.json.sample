@@ -1,0 +1,15 @@
+{
+  "services": {
+    "user-provided": [
+      {
+        "name": "<NAME>",
+        "label": "user-provided",
+        "credentials": {
+          "url": "https://gateway.watsonplatform.net/conversation/api",
+          "password": "<PASSWORD>",
+          "username": "<USERNAME>"
+        }
+      }
+    ]
+  }
+}

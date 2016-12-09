@@ -23,10 +23,10 @@
     margin: 0;
     border-radius: 4px;
     padding: 10px;
-    background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("img/watson.png");
-    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("img/watson.png");
-    background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("img/watson.png");
-    background-image: linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("img/watson.png");
+    background-image: -moz-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/img/watson.png");
+    background-image: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/img/watson.png");
+    background-image: -ms-linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/img/watson.png");
+    background-image: linear-gradient(bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url("/img/watson.png");
     background-attachment: inherit;
     background-position: center center;
     background-repeat: no-repeat;
@@ -55,10 +55,9 @@
     color: #fff;
 }
 
-.bot {
+.watson, .manager, .designer, .developer {
     padding: 0.5em;
-    border-radius: 5px;
-    background-color: rgba(90,171,164,1.0);
+    border-radius: 10px 10px 10px 0;
     margin-left: 0.5em;
     margin-right: 30%;
     -webkit-align-self: flex-start;
@@ -70,10 +69,21 @@
             animation: fadein 2s;
 }
 
+.watson {
+    background-color: rgba(199,231,242,0.6);
+    color: #000;
+}
+
+.manager, .designer, .developer {
+    background-color: rgba(199,231,242,0.6);
+    color: #000;
+}
+
 .user {
-    padding: 0.5em;
-    border-radius: 5px;
-    background-color: rgba(34, 82, 130, 0.9);
+    text-indent: 2em;
+    padding: 1.5em 0.5em 0.5em 0.5em;
+    border-radius: 10px 10px 0 10px;
+    background-color: rgba(29,142,186,0.9);
     margin-right: 0.5em;
     margin-left: 30%;
     -webkit-align-self: flex-end;
@@ -83,6 +93,34 @@
         -ms-animation: fadein 1s; 
          -o-animation: fadein 1s; 
             animation: fadein 1s;
+}
+
+.watson:before, .manager:before, .designer:before, .developer:before {
+    background-size: 3em 3em;
+    display: inline-block;
+    width: 3em; 
+    height: 3em;
+    content: '';
+}
+
+.watson:before {
+    background-image: url('/img/watson.png');
+}
+
+.manager:before {
+    background-image: url('/img/manager-av.png');
+}
+
+.designer:before {
+    background-image: url('/img/designer-av.png');
+}
+
+.developer:before {
+    background-image: url('/img/developer-av.png');
+}
+
+.name {
+    color: #7bae38;
 }
 
 @keyframes fadein {
