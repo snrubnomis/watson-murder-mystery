@@ -1,13 +1,13 @@
 /**
- * This file contains all of the web and hybrid functions for interacting with 
- * the basic chat bot dialog pane. 
+ * This file contains all of the web and hybrid functions for interacting with
+ * the basic chat bot dialog pane.
  *
  * @summary   Functions for Chat Bot.
  *
  * @since     0.0.1
  *
  */
- 
+
 "use strict";
 
 // Variables for chat and stored context specific events
@@ -17,6 +17,7 @@ var designer = 'designer';
 var developer = 'developer';
 var user = 'user';
 var context;  // Very important. Holds all the data for the current point of the chat.
+var progress = false;
 
 /**
  * @summary Enter Keyboard Event.
@@ -24,31 +25,26 @@ var context;  // Very important. Holds all the data for the current point of the
  * When a user presses enter in the chat input window it triggers the service interactions.
  *
  * @function newEvent
- * @param {Object} e - Information about the keyboard event. 
+ * @param {Object} e - Information about the keyboard event.
  */
 function newEvent(e) {
-	// Only check for a return/enter press - Event 13
+  	// Only check for a return/enter press - Event 13
     if (e.which === 13 || e.keyCode === 13) {
-
         var userInput = document.getElementById('chatMessage');
         var text = userInput.value;  // Using text as a recurring variable through functions
         text = text.replace(/(\r\n|\n|\r)/gm, ""); // Remove erroneous characters
 
         // If there is any input then check if this is a claim step
-		// Some claim steps are handled in newEvent and others are handled in userMessage
-		if (text) {
-
+    		// Some claim steps are handled in newEvent and others are handled in userMessage
+    		if (text) {
             // Display the user's text in the chat box and null out input box
             displayMessage(text, user);
             userInput.value = '';
             userMessage(text);
-            
         } else {
-
             // Blank user message. Do nothing.
-			console.error("No message.");
+  			    console.error("No message.");
             userInput.value = '';
-
             return false;
         }
     }
@@ -60,7 +56,7 @@ function newEvent(e) {
  * Primary function for parsing the conversation context  object.
  *
  * @function userMessage
- * @param {String} message - Input message from user or page load.  
+ * @param {String} message - Input message from user or page load.
  */
 function userMessage(message, nextPerson, previousPerson) {
     var params = {  // Object for parameters sent to the Watson Conversation service
@@ -107,8 +103,7 @@ function userMessage(message, nextPerson, previousPerson) {
     xhr.open('POST', uri, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {
-		
-		// Verify if there is a success code response and some text was sent
+		    // Verify if there is a success code response and some text was sent
         if (xhr.status === 200 && xhr.responseText) {
 
             var response = JSON.parse(xhr.responseText);
@@ -117,6 +112,8 @@ function userMessage(message, nextPerson, previousPerson) {
             context = response.context; // Store the context for next round of questions
 
             console.log("Got response from Bot: ", JSON.stringify(response));
+
+            checkContext(context);
 
             if (!response.output.forwardOutput) {
                 displayMessage(text, messageFrom, context[messageFrom]);
@@ -133,7 +130,7 @@ function userMessage(message, nextPerson, previousPerson) {
     xhr.onerror = function() {
         console.error('Network error trying to send message!');
     };
-	
+
 	console.log(JSON.stringify(params));
     xhr.send(JSON.stringify(params));
 }
@@ -145,7 +142,7 @@ function userMessage(message, nextPerson, previousPerson) {
  *
  * @function displayMessage
  * @param {String} text - Text to be dispalyed in chat box.
- * @param {String} user - Denotes if the message is from Bot or the user. 
+ * @param {String} user - Denotes if the message is from Bot or the user.
  * @return null
  */
 function displayMessage(text, user, name) {
@@ -173,7 +170,7 @@ function displayMessage(text, user, name) {
     } else {
         messageText = text;
     }
-    
+
     if (name) {
         bubble.innerHTML = "<div class='" + messageClass + "'><span class='name'>" + name + ":</span> " + messageText + "</div>";
     } else {
@@ -187,4 +184,76 @@ function displayMessage(text, user, name) {
     }
 
     return null;
+}
+
+/**
+ * @summary Check conversation context for signs of progress
+ *
+ * Checks the conversation context for variables that indicate motive, means and opportunity.
+ *
+ * @function checkContext
+ * @param {Object} context - Conversation context object
+ * @return null
+ */
+function checkContext(context) {
+    var element;
+    // Manager
+    if (context.managerMotive) {
+      element = document.getElementById('manager-motive');
+      element.className = 'checked';
+      element.title = 'Take Dr Redshirt\'s job';
+    }
+    if (context.managerOpportunity) {
+      element = document.getElementById('manager-opportunity');
+      element.className = 'checked';
+      element.title = 'Has badge access to room';
+    }
+    // Designer
+    if (context.affair) {
+      element = document.getElementById('designer-motive');
+      element.className = 'checked';
+      element.title = 'Dr Redshirt was having an affair';
+    }
+    if (context.designerOpportunity) {
+      element = document.getElementById('designer-opportunity');
+      element.className = 'checked';
+      element.title = 'Has Dr Redshirt\'s badge to access the room';
+    }
+    // Developer
+    if (context.stealing) {
+      element = document.getElementById('developer-motive');
+      element.className = 'checked';
+      element.title = 'Dr Redshirt found out that he was stealing robot technology';
+    }
+    if (context.virus) {
+      element = document.getElementById('developer-means');
+      element.className = 'checked';
+      element.title = 'Could create a virus to kill Dr Redshirt';
+    }
+    if (context.affair) {
+      element = document.getElementById('developer-opportunity');
+      element.className = 'checked';
+      element.title = 'Has cloned badge to access room';
+    }
+}
+
+/**
+ * @summary Show/hide progress area
+ *
+ * Shows and hides the progress area of the UI
+ *
+ * @function toggleProgress
+ * @return null
+ */
+function toggleProgress() {
+  progress = !progress;
+  var progressContainer = document.getElementById('progress-container');
+  var progressLink = document.getElementById('progress-link');
+  if (progress) {
+    progressContainer.className = '';
+    progressLink.className = 'active';
+  } else {
+    progressContainer.className = 'hidden';
+    progressLink.className = '';
+  }
 }

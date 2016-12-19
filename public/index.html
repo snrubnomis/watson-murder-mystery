@@ -8,12 +8,50 @@
 <link rel="stylesheet" href="css/bot.css">
 </head>
 <body onload="userMessage('');">
-<div class="container">
-    <div class="chatbot">
-        <div id="chatBox" class="dialogContainer"></div>
-        <textarea rows="4" id="chatMessage" class="dialogInput" placeholder="Get talking" onkeypress="return newEvent(event)"></textarea>
-    </div><!-- End class chatbot --> 
-</div><!-- End class container -->
+  <div class="container">
+      <div class="chatbot">
+          <div id="chatBox" class="dialogContainer"></div>
+          <textarea rows="4" id="chatMessage" class="dialogInput" placeholder="Get talking" onkeypress="return newEvent(event)"></textarea>
+
+          <div id="progress-container" class="hidden">
+            <div class="progress">
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Motive</th>
+                    <th>Means</th>
+                    <th>Opportunity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="manager"></td>
+                    <td id="manager-motive"></td>
+                    <td id="manager-means"></td>
+                    <td id="manager-opportunity"></td>
+                  </tr>
+                  <tr>
+                    <td class="designer"></td>
+                    <td id="designer-motive"></td>
+                    <td id="designer-means"></td>
+                    <td id="designer-opportunity"></td>
+                  </tr>
+                  <tr>
+                    <td class="developer"></td>
+                    <td id="developer-motive"></td>
+                    <td id="developer-means"></td>
+                    <td id="developer-opportunity"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="progress-link" class="progress-link">
+            <a href="#" onclick="toggleProgress()">PROGRESS</a>
+          </div>
+      </div><!-- End class chatbot -->
+  </div><!-- End class container -->
 </body>
 <script src="src/bot.js"></script>
 </html>
