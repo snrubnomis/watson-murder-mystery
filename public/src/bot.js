@@ -131,7 +131,7 @@ function userMessage(message, nextPerson, previousPerson) {
         console.error('Network error trying to send message!');
     };
 
-	console.log(JSON.stringify(params));
+	  console.log(JSON.stringify(params));
     xhr.send(JSON.stringify(params));
 }
 
@@ -246,14 +246,20 @@ function checkContext(context) {
  * @return null
  */
 function toggleProgress() {
-  progress = !progress;
-  var progressContainer = document.getElementById('progress-container');
-  var progressLink = document.getElementById('progress-link');
-  if (progress) {
-    progressContainer.className = '';
-    progressLink.className = 'active';
-  } else {
-    progressContainer.className = 'hidden';
-    progressLink.className = '';
-  }
+    // Toggle progress indicator and adjust view
+    progress = !progress;
+    var progressContainer = document.getElementById('progress-container');
+    var progressLink = document.getElementById('progress-link');
+    if (progress) {
+        progressContainer.className = '';
+        progressLink.className = 'active';
+    } else {
+        progressContainer.className = 'hidden';
+        progressLink.className = '';
+    }
+
+
+    // Ensure it stays scrolled to bottom
+    var chatBox = document.getElementById('chatBox');
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
