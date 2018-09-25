@@ -3,6 +3,7 @@
 body {
     font-size: 13px;
     margin: 0;
+    font-family: Futura, Arial, sans-serif;
 }
 
 * {
@@ -22,16 +23,10 @@ a:focus {
 }
 
 .container {
-    display: -ms-flexbox;
-  	display: -webkit-flex;
   	display: flex;
-
-  	-ms-flex-align: center;
-  	-webkit-align-items: center;
-  	-webkit-box-align: center;
-
-  	align-items: center;
+  	align-items: flex-start;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .dialogContainer {
@@ -39,7 +34,7 @@ a:focus {
     flex-direction: column;
     flex: 1;
     font-size: 14px;
-    width: 300px;
+    width: 500px;
     min-height: 270px;
     margin: 0;
     border-radius: 4px;
@@ -57,6 +52,13 @@ a:focus {
     border: 1px solid rgba(86,167,161,1.0);
 }
 
+@media screen and (max-width: 500px) {
+    .dialogContainer {
+        width: 90%;
+        align-self: center;
+    }
+}
+
 .chatbot {
     display: flex;
     flex-direction: column;
@@ -65,7 +67,7 @@ a:focus {
 }
 
 .chatbot textarea {
-    width: 300px;
+    width: 500px;
     margin: 15px 0;
     border: 1px solid rgba(86,167,161,1.0);
     min-height: 60px;
@@ -77,9 +79,19 @@ a:focus {
     resize: none;
 }
 
+@media screen and (max-width: 500px) {
+    .chatbot {
+        width: 100%
+    }
+
+    .chatbot textarea {
+        width: 90%;
+        align-self: center;
+    }
+}
+
 .message {
     margin-top: 0.5em;
-    font-weight: bold;
     color: #fff;
 }
 
@@ -87,11 +99,17 @@ a:focus {
 .manager,
 .designer,
 .developer {
+    display: flex;
     padding: 0.5em;
     margin-left: 0.5em;
-    margin-right: 30%;
-    -webkit-align-self: flex-start;
     align-self: flex-start;
+}
+
+.dialogContainer .watson,
+.dialogContainer .manager,
+.dialogContainer .designer,
+.dialogContainer .developer {
+    margin-right: 20%;
 }
 
 .dialogContainer .watson,
@@ -114,7 +132,7 @@ a:focus {
     border-radius: 10px 10px 0 10px;
     background-color: rgba(29,142,186,0.9);
     margin-right: 0.5em;
-    margin-left: 30%;
+    margin-left: 20%;
     -webkit-align-self: flex-end;
     align-self: flex-end;
 	  -webkit-animation: fadein 1s;
@@ -129,26 +147,41 @@ a:focus {
 .designer:before,
 .developer:before {
     background-size: 3em 3em;
-    display: inline-block;
+    background-repeat: no-repeat;
     width: 3em;
-    height: 3em;
-    content: '';
+    content: 'Brian';
+    padding-top: 3em;
+    padding-right: 2em;
+    color: #7bae38;
 }
 
 .watson:before {
     background-image: url('/img/watson.png');
+    content: 'Watson';
 }
 
 .manager:before {
     background-image: url('/img/manager-av.png');
+    content: 'Brian';
 }
 
 .designer:before {
     background-image: url('/img/designer-av.png');
+    content: 'Edwina';
 }
 
 .developer:before {
     background-image: url('/img/developer-av.png');
+    content: 'David';
+}
+
+td {
+    text-align: center;
+}
+
+td a img {
+    width: 50px;
+    height: 50px;
 }
 
 .name {
@@ -179,7 +212,7 @@ a:focus {
 .progress {
   border: 1px solid rgba(86,167,161,1.0);
   border-radius: 4px 4px 0 4px;
-  margin-bottom: .25em;
+  margin: 1em;
 }
 
 table {
@@ -190,9 +223,9 @@ table {
 table .manager::before,
 table .designer::before,
 table .developer::before {
-    width: 30px;
-    height: 30px;
-    background-size: 30px;
+    width: 50px;
+    height: 50px;
+    background-size: 50px;
 }
 
 table td,
@@ -200,8 +233,9 @@ table th {
     font-weight: normal;
 }
 
-table th {
+table th:not(:first-child) {
   padding: .5em;
+  width: 78px;
 }
 
 table tbody tr {

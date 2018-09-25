@@ -98,7 +98,7 @@ function userMessage(message, nextPerson, previousPerson) {
     }
 
     var xhr = new XMLHttpRequest();
-    var uri = '/api/bot';
+    var uri = '/api/message';
 
     xhr.open('POST', uri, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -148,40 +148,40 @@ function userMessage(message, nextPerson, previousPerson) {
 function displayMessage(text, user, name) {
 
     var chat = document.getElementById('chatBox');
-    var bubble = document.createElement('div');
 
-    bubble.className = 'message';  // Wrap the text first in a message class for common formatting
-
-    // Set chat bubble color and position based on the user parameter
-    var messageClass = user;
-	if (user === manager) {
-        var messageClass = manager;
-    } else if (user === designer) {
-        var messageClass = designer;
-    } else if (user === developer) {
-        var messageClass = developer;
-    } else if (user === watson) {
-        var messageClass = watson;
-    }
-
-    var messageText;
+    var messages;
     if (Array.isArray(text)) {
-        messageText = text.join(' ');
+        messages = text;
     } else {
-        messageText = text;
+        messages = [text];
     }
 
-    if (name) {
-        bubble.innerHTML = "<div class='" + messageClass + "'><span class='name'>" + name + ":</span> " + messageText + "</div>";
-    } else {
-        bubble.innerHTML = "<div class='" + messageClass + "'>" + messageText + "</div>";
+    for (var i = 0; i < messages.length; i++) {
+        var bubble = document.createElement('div');
+
+        bubble.className = 'message';  // Wrap the text first in a message class for common formatting
+
+        // Set chat bubble color and position based on the user parameter
+        var messageClass = user;
+        if (user === manager) {
+            var messageClass = manager;
+        } else if (user === designer) {
+            var messageClass = designer;
+        } else if (user === developer) {
+            var messageClass = developer;
+        } else if (user === watson) {
+            var messageClass = watson;
+        }
+
+        bubble.innerHTML = "<div class='" + messageClass + "'>" + messages[i] + "</div>";
+
+        if (messages[i].length > 0) {
+            chat.appendChild(bubble);
+            chat.scrollTop = chat.scrollHeight;  // Move chat down to the last message displayed
+        }
     }
 
-    if (messageText.length > 0) {
-        chat.appendChild(bubble);
-        chat.scrollTop = chat.scrollHeight;  // Move chat down to the last message displayed
-        document.getElementById('chatMessage').focus();
-    }
+    document.getElementById('chatMessage').focus();
 
     return null;
 }
@@ -201,7 +201,7 @@ function checkContext(context) {
     if (context.managerMotive) {
       element = document.getElementById('manager-motive');
       element.className = 'checked';
-      element.title = 'Take Dr Redshirt\'s job';
+      element.title = 'Take Dr Bodhi\'s job';
     }
     if (context.managerOpportunity) {
       element = document.getElementById('manager-opportunity');
@@ -212,25 +212,25 @@ function checkContext(context) {
     if (context.affair) {
       element = document.getElementById('designer-motive');
       element.className = 'checked';
-      element.title = 'Dr Redshirt was having an affair';
+      element.title = 'Dr Bodhi was having an affair';
     }
     if (context.designerOpportunity) {
       element = document.getElementById('designer-opportunity');
       element.className = 'checked';
-      element.title = 'Has Dr Redshirt\'s badge to access the room';
+      element.title = 'Has Dr Bodhi\'s badge to access the room';
     }
     // Developer
     if (context.stealing) {
       element = document.getElementById('developer-motive');
       element.className = 'checked';
-      element.title = 'Dr Redshirt found out that he was stealing robot technology';
+      element.title = 'Dr Bodhi found out that he was stealing robot technology';
     }
     if (context.virus) {
       element = document.getElementById('developer-means');
       element.className = 'checked';
-      element.title = 'Could create a virus to kill Dr Redshirt';
+      element.title = 'Could create a virus to kill Dr Bodhi';
     }
-    if (context.affair) {
+    if (context.developerOpportunity) {
       element = document.getElementById('developer-opportunity');
       element.className = 'checked';
       element.title = 'Has cloned badge to access room';
@@ -257,7 +257,6 @@ function toggleProgress() {
         progressContainer.className = 'hidden';
         progressLink.className = '';
     }
-
 
     // Ensure it stays scrolled to bottom
     var chatBox = document.getElementById('chatBox');

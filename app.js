@@ -43,11 +43,15 @@ app.listen(appEnv.port, '0.0.0.0', function() {
  Watson Conversation
 
 *************************************************************************************************/
-var config = _.merge(appEnv.getServiceCreds(process.env.CONVERSATION_SERVICE), {
-  version_date : '2016-07-11',
+var config = {
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD,
+  version_date : '2017-02-03',
   version : 'v1'
-});
-var conversation = watson.conversation(config);
+};
+var ConversationV1 = require('watson-developer-cloud/conversation/v1');
+var conversation = new ConversationV1(config);
+
 
 var workspaces = {
     manager : process.env.WORKSPACE_MANAGER,
@@ -99,7 +103,7 @@ function sendMessage (bot, input, context, callback) {
 }
 
 // Allow clients to interact with the bot
-app.post('/api/bot', function(req, res) {
+app.post('/api/message', function(req, res) {
     
     console.log("Got request for Le Bot");
     console.log("Request is: ",req);
@@ -159,5 +163,5 @@ app.post('/api/bot', function(req, res) {
         return res.json(response);
     });
 
-}); // End app.post '/api/bot'
+}); // End app.post '/api/message'
 

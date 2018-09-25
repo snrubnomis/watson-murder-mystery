@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Watson Murder Mystery</title>
+<title>Watson Mystery</title>
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,47 +11,59 @@
   <div class="container">
       <div class="chatbot">
           <div id="chatBox" class="dialogContainer"></div>
-          <textarea rows="4" id="chatMessage" class="dialogInput" placeholder="Get talking" onkeypress="return newEvent(event)"></textarea>
-
-          <div id="progress-container" class="hidden">
-            <div class="progress">
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Motive</th>
-                    <th>Means</th>
-                    <th>Opportunity</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="manager"></td>
-                    <td id="manager-motive"></td>
-                    <td id="manager-means"></td>
-                    <td id="manager-opportunity"></td>
-                  </tr>
-                  <tr>
-                    <td class="designer"></td>
-                    <td id="designer-motive"></td>
-                    <td id="designer-means"></td>
-                    <td id="designer-opportunity"></td>
-                  </tr>
-                  <tr>
-                    <td class="developer"></td>
-                    <td id="developer-motive"></td>
-                    <td id="developer-means"></td>
-                    <td id="developer-opportunity"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div id="progress-link" class="progress-link">
-            <a href="#" onclick="toggleProgress()">PROGRESS</a>
-          </div>
+          <textarea rows="4" id="chatMessage" class="dialogInput" placeholder="Talk..." onkeypress="return newEvent(event)"></textarea>
       </div><!-- End class chatbot -->
+      <div id="progress-container">
+          <div class="progress">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Motive</th>
+                  <th>Means</th>
+                  <th>Opportunity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td title="Brian - Manager">
+                    <a href="javascript:void(0);" onclick="userMessage('Watson, talk to Brian')">
+                      <img src="./img/manager-av.png"/>
+                      <div>Brian</div>
+                    </a>
+                  </td>
+                  <td id="manager-motive"></td>
+                  <td id="manager-means"></td>
+                  <td id="manager-opportunity"></td>
+                </tr>
+                <tr>
+                  <td title="Edwina - Designer">
+                    <a href="javascript:void(0);" onclick="userMessage('Watson, talk to Edwina')">
+                      <img src="./img/designer-av.png"/>
+                      <div>Edwina</div>
+                    </a>
+                  </td>
+                  <td id="designer-motive"></td>
+                  <td id="designer-means"></td>
+                  <td id="designer-opportunity"></td>
+                </tr>
+                <tr>
+                  <td title="David - Developer">
+                    <a href="javascript:void(0);" onclick="userMessage('Watson, talk to David')">
+                      <img src="./img/developer-av.png"/>
+                      <div>David</div>
+                    </a>
+                  </td>
+                  <td id="developer-motive"></td>
+                  <td id="developer-means"></td>
+                  <td id="developer-opportunity"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
   </div><!-- End class container -->
+
 </body>
 <script src="src/bot.js"></script>
 </html>
